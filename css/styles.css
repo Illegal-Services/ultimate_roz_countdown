@@ -1,14 +1,35 @@
-/* style.css */
+/* Global CSS file used for styling the different pages of the website */
 
-body {
-  font-family: Arial, sans-serif;
-  text-align: center;
-  background-color: #333333;
-  color: #f5f5f5;
+html, body {
+  background-color: #1c1c1c;
+  font-family: Arial, Helvetica, sans-serif;
+  word-wrap: break-word;
+  width: auto;
 }
 
-.countdown {
-  font-size: 24px;
+body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  min-height: 100vh;
+  margin: 0;
+}
+
+.airing-date-container {
+  color: #f5f5f5;
   font-weight: bold;
-  margin-top: 50px;
+  font-size: 24px;
+  max-width: 90vh;
+}
+
+.airing-date-countdown {
+  margin-top: 6%;
+}
+
+
+@media screen and (max-width: 500px) {
+  .airing-date-container {
+    font-size: 10px;
+  }
 }

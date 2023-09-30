@@ -1,5 +1,8 @@
 window.onload = async function () {
-  const countdownTimer = document.getElementById('countdown-timer');
+  const countdownTimer = document.getElementById('airing-date-countdown-timer');
+  if (!(countdownTimer instanceof HTMLElement)) {
+    throw new Error(`'countdownTimer' is not an HTMLElement`);
+  }
 
   updateCountdown(countdownTimer); // Initial call to set the countdown
   setInterval(() => updateCountdown(countdownTimer), 60000); // Repeat the call to set the countdown every minute
@@ -7,9 +10,7 @@ window.onload = async function () {
 
 
 /**
-* Fired when the permission to access all website data is revoked.
-*
-* @param {HTMLElement | null} countdownTimer - A reference to the countdown timer element.
+* @param {HTMLElement} countdownTimer - A reference to the countdown timer element.
 *
 * @returns {void}
 */
