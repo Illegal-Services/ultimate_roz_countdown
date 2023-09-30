@@ -21,14 +21,13 @@ function isHTMLElement(element) {
 
 
 /**
- * @param {HTMLElement} countdownTimer - A reference to the countdown timer element.
+ * @param {HTMLElement} countdownTimer - A reference to the countdown timer, HTML element.
  *
  * @returns {void}
  */
 async function updateCountdown(countdownTimer) {
   const apiUrl = 'https://graphql.anilist.co';
   const animeTitle = 'The Rising of the Shield Hero Season 3';
-
   const requestOptions = {
     method: 'POST',
     headers: {
@@ -65,11 +64,12 @@ async function updateCountdown(countdownTimer) {
   }
 
   const responseJson = await response.json();
+
   const anime = responseJson.data.Media;
   const episode = anime.nextAiringEpisode.episode;
   const unixTimestamp = anime.nextAiringEpisode.airingAt
-  const airingDate = formatCountdown(episode, unixTimestamp);
 
+  const airingDate = formatCountdown(episode, unixTimestamp);
   countdownTimer.textContent = airingDate;
 }
 
