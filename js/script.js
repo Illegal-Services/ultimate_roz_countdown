@@ -1,6 +1,6 @@
 window.onload = async function () {
   const countdownTimer = document.getElementById('airing-date-countdown-timer');
-  if (!(countdownTimer instanceof HTMLElement)) {
+  if (!isHTMLElement(countdownTimer)) {
     throw new Error(`'countdownTimer' is not an HTMLElement`);
   }
 
@@ -10,10 +10,21 @@ window.onload = async function () {
 
 
 /**
-* @param {HTMLElement} countdownTimer - A reference to the countdown timer element.
-*
-* @returns {void}
-*/
+ * Checks if the provided element is an instance of HTMLElement.
+ *
+ * @param {HTMLElement} element - The element to check.
+ * @returns {boolean} `true` if the element is an instance of HTMLElement, otherwise `false`.
+ */
+function isHTMLElement(element) {
+  return element instanceof HTMLElement;
+}
+
+
+/**
+ * @param {HTMLElement} countdownTimer - A reference to the countdown timer element.
+ *
+ * @returns {void}
+ */
 async function updateCountdown(countdownTimer) {
   const apiUrl = 'https://graphql.anilist.co';
   const animeTitle = 'The Rising of the Shield Hero Season 3';
@@ -31,6 +42,7 @@ async function updateCountdown(countdownTimer) {
               romaji
             }
             nextAiringEpisode {
+              episode
               airingAt
             }
           }
@@ -57,13 +69,24 @@ async function updateCountdown(countdownTimer) {
   if (!anime) {
     throw new Error(`Anime not found.`);
   }
+  console.log(anime)
 
-  const airingDate = formatCountdown(anime.nextAiringEpisode.airingAt);
+  const episode = anime.nextAiringEpisode.episode;
+  const unixTimestamp = anime.nextAiringEpisode.airingAt
+  const airingDate = formatCountdown(unixTimestamp, episode);
   countdownTimer.textContent = airingDate;
 }
 
 
-function formatCountdown(unixTimestamp) {
+/**
+ * Formats a countdown based on a Unix timestamp and episode number.
+ *
+ * @param {number} unixTimestamp - The Unix timestamp of the countdown.
+ * @param {number} episode - The episode number for which the countdown is calculated.
+ *
+ * @returns {string} The formatted countdown as a string.
+ */
+function formatCountdown(unixTimestamp, episode) {
   // Create a Date object using the Unix timestamp (multiply by 1000 to convert to milliseconds)
   const targetDate = new Date(unixTimestamp * 1000);
 
@@ -80,7 +103,7 @@ function formatCountdown(unixTimestamp) {
   const seconds = Math.floor((timeDifference % (1000 * 60)) / 1000);
 
   // Format the result
-  const formattedCountdown = `${days}d ${hours}h ${minutes}m ${seconds}s`;
+  const formattedCountdown = `Ep ${episode}: ${days}d ${hours}h ${minutes}m ${seconds}s`;
 
   return formattedCountdown;
 }
