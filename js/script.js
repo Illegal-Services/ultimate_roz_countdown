@@ -66,14 +66,10 @@ async function updateCountdown(countdownTimer) {
 
   const responseJson = await response.json();
   const anime = responseJson.data.Media;
-  if (!anime) {
-    throw new Error(`Anime not found.`);
-  }
-  console.log(anime)
-
   const episode = anime.nextAiringEpisode.episode;
   const unixTimestamp = anime.nextAiringEpisode.airingAt
-  const airingDate = formatCountdown(unixTimestamp, episode);
+  const airingDate = formatCountdown(episode, unixTimestamp);
+
   countdownTimer.textContent = airingDate;
 }
 
@@ -81,12 +77,12 @@ async function updateCountdown(countdownTimer) {
 /**
  * Formats a countdown based on a Unix timestamp and episode number.
  *
- * @param {number} unixTimestamp - The Unix timestamp of the countdown.
- * @param {number} episode - The episode number for which the countdown is calculated.
+ * @param {number} episode - The episode number for which the 'countdown' is calculated.
+ * @param {number} unixTimestamp - An Unix timestampfor which the 'episode' is calculated.
  *
- * @returns {string} The formatted countdown as a string.
+ * @returns {string} The formatted episode and it's countdown, as a string.
  */
-function formatCountdown(unixTimestamp, episode) {
+function formatCountdown(episode, unixTimestamp) {
   // Create a Date object using the Unix timestamp (multiply by 1000 to convert to milliseconds)
   const targetDate = new Date(unixTimestamp * 1000);
 

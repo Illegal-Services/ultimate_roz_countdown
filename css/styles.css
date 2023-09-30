@@ -17,7 +17,7 @@ body {
 }
 
 .jacket-image {
-  /* max-width: 20vw;  Attempt to fix the image not resiging while zooming, I don',t know how to fix it, I hate CSS with passion grrr */
+  /* max-width: 20vw;  Attempt to fix the image not resiging while zooming, I don't know how to fix it, I hate CSS with passion grrr */
   margin-right: 1vh;
 }
 
