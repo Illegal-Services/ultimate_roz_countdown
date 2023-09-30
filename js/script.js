@@ -74,7 +74,7 @@ function formatCountdown(unixTimestamp) {
   const minutes = Math.floor((timeDifference % (1000 * 60 * 60)) / (1000 * 60));
 
   // Format the result
-  const formattedCountdown = `Ep 1: ${days}d ${hours}h ${minutes}m`;
+  const formattedCountdown = `${days}d ${hours}h ${minutes}m`;
 
   return formattedCountdown;
 }
