@@ -1,15 +1,19 @@
 window.onload = async function () {
-  setInterval(async function () {
-    await updateCountdown();
-  }, 60000);
-  // Initial call to set the countdown
-  updateCountdown();
+  const countdownTimer = document.getElementById('countdown-timer');
+
+  updateCountdown(countdownTimer); // Initial call to set the countdown
+  setInterval(() => updateCountdown(countdownTimer), 60000); // Repeat the call to set the countdown every minute
 }
 
 
-async function updateCountdown() {
-  const countdownTimer = document.getElementById('countdown-timer');
-
+/**
+* Fired when the permission to access all website data is revoked.
+*
+* @param {HTMLElement | null} countdownTimer - A reference to the countdown timer element.
+*
+* @returns {void}
+*/
+async function updateCountdown(countdownTimer) {
   const apiUrl = 'https://graphql.anilist.co';
   const animeTitle = 'The Rising of the Shield Hero Season 3';
 
@@ -72,9 +76,10 @@ function formatCountdown(unixTimestamp) {
   const days = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
   const hours = Math.floor((timeDifference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
   const minutes = Math.floor((timeDifference % (1000 * 60 * 60)) / (1000 * 60));
+  const seconds = Math.floor((timeDifference % (1000 * 60)) / 1000);
 
   // Format the result
-  const formattedCountdown = `${days}d ${hours}h ${minutes}m`;
+  const formattedCountdown = `${days}d ${hours}h ${minutes}m ${seconds}s`;
 
   return formattedCountdown;
 }
