@@ -52,7 +52,7 @@ function isHTMLElement(element) {
 /**
  * Fetches the next airing episode and its Unix timestamp for a given anime title using the AniList GraphQL API.
  *
- * @returns {{ episode: number, unixTimestamp: number }} An object containing the next airing episode number and Unix timestamp.
+ * @returns {Promise<{ episode: number, unixTimestamp: number }>} An object containing the next airing episode number and Unix timestamp.
  *
  * @throws {Error} If there is an issue with the network request or the response is not OK.
  */
