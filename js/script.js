@@ -4,8 +4,36 @@ window.onload = async function () {
     throw new Error(`'countdownTimer' is not an HTMLElement`);
   }
 
-  updateCountdown(countdownTimer); // Initial call to set the countdown
-  setInterval(() => updateCountdown(countdownTimer), 60000); // Repeat the call to set the countdown every minute
+  let episode, unixTimestamp;
+
+  /**
+   * Function to update the countdown timer
+   *
+   * @returns {void}
+   */
+  const updateCountdown = () => {
+    const airingDate = formatCountdown(episode, unixTimestamp);
+    countdownTimer.textContent = airingDate;
+  };
+
+  // Initial call to set the countdown
+  (async () => {
+    ({ episode, unixTimestamp } = await fetchCountdown());
+    updateCountdown();
+
+    // Set up an interval to update the countdown every second
+    setInterval(updateCountdown, 1000);
+
+    // Set up a separate interval to fetch new data and pause every minute
+    setInterval(async () => {
+      ({ episode, unixTimestamp } = await fetchCountdown());
+
+      // Wait for one minute (60,000 milliseconds) before resuming the countdown
+      setTimeout(() => {
+        updateCountdown(); // Update immediately after resuming
+      }, 60000);
+    }, 60000); // 60,000 milliseconds = 1 minute
+  })();
 }
 
 
@@ -13,7 +41,8 @@ window.onload = async function () {
  * Checks if the provided element is an instance of HTMLElement.
  *
  * @param {HTMLElement} element - The element to check.
- * @returns {boolean} `true` if the element is an instance of HTMLElement, otherwise `false`.
+ *
+ * @returns {{element: boolean}} `true` if the element is an instance of HTMLElement, otherwise `false`.
  */
 function isHTMLElement(element) {
   return element instanceof HTMLElement;
@@ -21,11 +50,13 @@ function isHTMLElement(element) {
 
 
 /**
- * @param {HTMLElement} countdownTimer - A reference to the countdown timer, HTML element.
+ * Fetches the next airing episode and its Unix timestamp for a given anime title using the AniList GraphQL API.
  *
- * @returns {void}
+ * @returns {{ episode: number, unixTimestamp: number }} An object containing the next airing episode number and Unix timestamp.
+ *
+ * @throws {Error} If there is an issue with the network request or the response is not OK.
  */
-async function updateCountdown(countdownTimer) {
+async function fetchCountdown() {
   const apiUrl = 'https://graphql.anilist.co';
   const animeTitle = 'The Rising of the Shield Hero Season 3';
   const requestOptions = {
@@ -68,9 +99,7 @@ async function updateCountdown(countdownTimer) {
   const anime = responseJson.data.Media;
   const episode = anime.nextAiringEpisode.episode;
   const unixTimestamp = anime.nextAiringEpisode.airingAt
-
-  const airingDate = formatCountdown(episode, unixTimestamp);
-  countdownTimer.textContent = airingDate;
+  return { episode, unixTimestamp }
 }
 
 
@@ -80,7 +109,7 @@ async function updateCountdown(countdownTimer) {
  * @param {number} episode - The episode number for which the 'countdown' is calculated.
  * @param {number} unixTimestamp - An Unix timestampfor which the 'episode' is calculated.
  *
- * @returns {string} The formatted episode and it's countdown, as a string.
+ * @returns {{formattedCountdown: string}} The formatted episode and it's countdown, as a string.
  */
 function formatCountdown(episode, unixTimestamp) {
   // Create a Date object using the Unix timestamp (multiply by 1000 to convert to milliseconds)
