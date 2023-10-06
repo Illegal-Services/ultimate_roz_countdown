@@ -42,7 +42,7 @@ window.onload = async function () {
  *
  * @param {HTMLElement} element - The element to check.
  *
- * @returns {{element: boolean}} `true` if the element is an instance of HTMLElement, otherwise `false`.
+ * @returns {boolean} `true` if the element is an instance of HTMLElement, otherwise `false`.
  */
 function isHTMLElement(element) {
   return element instanceof HTMLElement;
@@ -82,13 +82,12 @@ async function fetchCountdown() {
     }),
   };
 
-  let _response;
+  let response;
   try {
-    _response = await fetch(apiUrl, requestOptions);
+    response = await fetch(apiUrl, requestOptions);
   } catch (error) {
     throw new Error(`Network response was not ok: ${error}`);
   }
-  const response = _response;
 
   if (!response.ok) {
     throw new Error(`Network response was not ok.`);
@@ -101,7 +100,6 @@ async function fetchCountdown() {
   const unixTimestamp = anime.nextAiringEpisode.airingAt
   return { episode, unixTimestamp }
 }
-
 
 /**
  * Formats a countdown based on a Unix timestamp and episode number.
