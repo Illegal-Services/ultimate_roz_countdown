@@ -1,49 +1,28 @@
 window.onload = async function () {
   const countdownTimer = document.getElementById("airing-date-countdown-timer");
-  if (!isHTMLElement(countdownTimer)) {
-    throw new Error(`'countdownTimer' is not an HTMLElement`);
-  }
 
   let episode, unixTimestamp;
+
+  // Initial call to set the countdown
+  ({ episode, unixTimestamp } = await fetchCountdown());
+  updateCountdown();
+
+  // Set up an interval to update the countdown every second
+  setInterval(updateCountdown, 1000);
+
+  // Set up a separate interval to fetch new data and pause every minute
+  setInterval(async function () {
+    ({ episode, unixTimestamp } = await fetchCountdown());
+  }, 60000);
 
   /**
    * Function to update the countdown timer
    */
-  const updateCountdown = () => {
+  function updateCountdown() {
     const airingDate = formatCountdown(episode, unixTimestamp);
     countdownTimer.textContent = airingDate;
-  };
-
-  // Initial call to set the countdown
-  (async () => {
-    ({ episode, unixTimestamp } = await fetchCountdown());
-    updateCountdown();
-
-    // Set up an interval to update the countdown every second
-    setInterval(updateCountdown, 1000);
-
-    // Set up a separate interval to fetch new data and pause every minute
-    setInterval(async () => {
-      ({ episode, unixTimestamp } = await fetchCountdown());
-
-      // Wait for one minute (60,000 milliseconds) before resuming the countdown
-      setTimeout(() => {
-        updateCountdown(); // Update immediately after resuming
-      }, 60000);
-    }, 60000); // 60,000 milliseconds = 1 minute
-  })();
+  }
 };
-
-/**
- * Checks if the provided element is an instance of HTMLElement.
- *
- * @param {HTMLElement} element - The element to check.
- *
- * @returns `true` if the element is an instance of HTMLElement, otherwise `false`.
- */
-function isHTMLElement(element) {
-  return element instanceof HTMLElement;
-}
 
 /**
  * Fetches the next airing episode and its Unix timestamp for a given anime title using the AniList GraphQL API.
