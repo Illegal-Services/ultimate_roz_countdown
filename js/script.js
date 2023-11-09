@@ -1,5 +1,5 @@
 window.onload = async function () {
-  const countdownTimer = document.getElementById('airing-date-countdown-timer');
+  const countdownTimer = document.getElementById("airing-date-countdown-timer");
   if (!isHTMLElement(countdownTimer)) {
     throw new Error(`'countdownTimer' is not an HTMLElement`);
   }
@@ -8,8 +8,6 @@ window.onload = async function () {
 
   /**
    * Function to update the countdown timer
-   *
-   * @returns {void}
    */
   const updateCountdown = () => {
     const airingDate = formatCountdown(episode, unixTimestamp);
@@ -34,20 +32,18 @@ window.onload = async function () {
       }, 60000);
     }, 60000); // 60,000 milliseconds = 1 minute
   })();
-}
-
+};
 
 /**
  * Checks if the provided element is an instance of HTMLElement.
  *
  * @param {HTMLElement} element - The element to check.
  *
- * @returns {boolean} `true` if the element is an instance of HTMLElement, otherwise `false`.
+ * @returns `true` if the element is an instance of HTMLElement, otherwise `false`.
  */
 function isHTMLElement(element) {
   return element instanceof HTMLElement;
 }
-
 
 /**
  * Fetches the next airing episode and its Unix timestamp for a given anime title using the AniList GraphQL API.
@@ -57,12 +53,12 @@ function isHTMLElement(element) {
  * @throws {Error} If there is an issue with the network request or the response is not OK.
  */
 async function fetchCountdown() {
-  const apiUrl = 'https://graphql.anilist.co';
-  const animeTitle = 'The Rising of the Shield Hero Season 3';
+  const apiUrl = "https://graphql.anilist.co";
+  const animeTitle = "The Rising of the Shield Hero Season 3";
   const requestOptions = {
-    method: 'POST',
+    method: "POST",
     headers: {
-      'Content-Type': 'application/json',
+      "Content-Type": "application/json",
     },
     body: JSON.stringify({
       query: `
@@ -97,8 +93,8 @@ async function fetchCountdown() {
 
   const anime = responseJson.data.Media;
   const episode = anime.nextAiringEpisode.episode;
-  const unixTimestamp = anime.nextAiringEpisode.airingAt
-  return { episode, unixTimestamp }
+  const unixTimestamp = anime.nextAiringEpisode.airingAt;
+  return { episode, unixTimestamp };
 }
 
 /**
@@ -107,7 +103,7 @@ async function fetchCountdown() {
  * @param {number} episode - The episode number for which the 'countdown' is calculated.
  * @param {number} unixTimestamp - An Unix timestampfor which the 'episode' is calculated.
  *
- * @returns {{formattedCountdown: string}} The formatted episode and it's countdown, as a string.
+ * @returns The formatted episode and it's countdown, as a string.
  */
 function formatCountdown(episode, unixTimestamp) {
   // Create a Date object using the Unix timestamp (multiply by 1000 to convert to milliseconds)
